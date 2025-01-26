@@ -1,0 +1,29 @@
+name: Vale Lint Checker
+
+# Trigger the workflow on specific events.
+on:
+  push: # Run on every push to the main branch.
+    branches:
+      - main
+
+  pull_request: # Run on all pull requests.
+    # No need to specify branches unless limiting PRs to specific branches.
+
+  workflow_dispatch: # Allow manual triggering from the Actions tab.
+
+jobs:
+  prose:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code.
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Run Vale lint checks.
+      - name: Vale Lint
+        uses: errata-ai/vale-action@v1 # Use a specific version for stability.
+        with:
+          files: .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
