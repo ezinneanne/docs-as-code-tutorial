@@ -5,24 +5,28 @@ on:
   push: # Run on every push to the main branch.
     branches:
       - main
-
-  pull_request: # Run on all pull requests.
-    # No need to specify branches unless limiting PRs to specific branches.
-
+  pull_request: # Run on pull requests targeting any branch.
+    branches:
+      - '*'
   workflow_dispatch: # Allow manual triggering from the Actions tab.
 
 jobs:
   prose:
     runs-on: ubuntu-latest
-
     steps:
       # Step 1: Check out the repository code.
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3 
 
-      # Step 2: Run Vale lint checks.
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # Use Node.js 16 or higher
+
+      # Step 3: Run Vale lint checks.
       - name: Vale Lint
-        uses: errata-ai/vale-action@v1 # Use a specific version for stability.
+        uses: errata-ai/vale-action@reviewdog
         with:
           files: .
         env:
